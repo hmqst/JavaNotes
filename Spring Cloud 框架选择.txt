@@ -1,0 +1,51 @@
+start.spring.io/actuator/info
+https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E
+选择对应ckoud和boot版本以及alibaba版本
+
+1、服务注册与发现 
+    Eureka（停更）
+    Zookeeper（较旧）
+    Consoul（不推荐）
+    Nacos（推荐AliBaba）
+2、服务调用
+    Ribbon（停更）
+    LoadBalancer；
+3、服务调用2
+    Feign（停更）
+    OpenFeign
+3、服务熔断和降级
+    Hystrix（停更）
+    Resilience4j（国外）
+    Sentinel（国内AliBaba）
+4、服务总线
+    Bus（不推荐）
+    Nacos（推荐AliBaba）
+5、配置中心管理
+    Config（不推荐）
+    Apollo
+    Nacos（推荐AliBaba）
+6、服务网关 
+    Zuul（1 2均不推荐）
+    Gateway
+
+
+
+最后选择：
+Spring Cloud——2020.0.2
+Spring Boot——2.4.2
+Spring Cloud Alibaba——2021.1
+    Nacos——1.4.1
+    Sentinel——1.8.0
+Spring Cloud LoadBalancer
+Spring Cloud OpenFeign
+Spring Cloud Gateway
+Spring Cloud Sleuth+ZipKin
+Spring Boot Admin
+
+
+1、创建Maven工程（maven3.5以上 后者https://blog.csdn.net/sunrj_niu/article/details/111885748）
+    设置File Encodings 为utf-8并打钩
+    设置Annotation Processors开启
+    设置Java Compiler为Java8
+    修改pom文件添加<packaging>pom</packaging>
+    统一管理jar包（properties）
