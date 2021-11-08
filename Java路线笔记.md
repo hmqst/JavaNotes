@@ -1,3 +1,5 @@
+
+
 ## Java路线笔记
 
 [B站Java学习地址]: https://www.bilibili.com/read/cv5702420	"Java学习完整路线，强烈建议收藏转发"
@@ -22,7 +24,7 @@
 
   - 打开语法高亮
 
-    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200821184604903.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EyMzUyMTU5OTUw,size_16,color_FFFFFF,t_70#pic_center)
+    ![在这里插入图片描述](./img/1.png)
 
   - 设置==高亮==为字体变红，`重点标记`字体变红，修改对应主题 css 文件，加入 mark 样式，修改 code 样式
 
@@ -42,7 +44,7 @@
     }
     ~~~
     
-    ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200821183029284.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2EyMzUyMTU5OTUw,size_16,color_FFFFFF,t_70#pic_center)
+    ![在这里插入图片描述](./img/2.png)
 
 #### 	2、开发环境
 
@@ -58,7 +60,7 @@
 
 - 配置环境变量 JAVA_HOME  PATH  CLASS_PATH  [环境变量配置](https://www.runoob.com/java/java-environment-setup.html)
 
-  ![image-20210623162521183](C:\Users\YunFeng\AppData\Roaming\Typora\typora-user-images\image-20210623162521183.png)
+  ![image-20210623162521183](./img/3.png)
 
 - MySQL5.7+和Navicat  [MySql5.7+下载](https://downloads.mysql.com/archives/installer/)  [Navicat下载 ](http://www.navicat.com.cn/)  [中文乱码解决方案](https://blog.csdn.net/qq_34694342/article/details/86703068)
 
@@ -804,7 +806,7 @@ Object result = uCompletableFuture.whenComplete((o, throwable) -> {
 > >
 > > 　　在访问volatile变量时**不会执行加锁操作**，因此也就不**会使执行线程阻塞**，因此**volatile变量是一种比sychronized关键字更轻量级的同步机制**。
 > >
-> > ![img](https://images2015.cnblogs.com/blog/731716/201607/731716-20160708224602686-2141387366.png)
+> > ![img](./img/4.png)
 > >
 > > 　　当对**非 volatile 变量进行读写**的时候，每个线程先从内存拷贝变量到CPU缓存中。如果计算机有多个CPU，每个线程可能在不同的CPU上被处理，这意味着每个线程可以拷贝到不同的 CPU cache 中。
 > >
@@ -1516,7 +1518,7 @@ git config user.name "freedom"
 git config --global user.name "freedom"
 ~~~
 
-![img](https://images2017.cnblogs.com/blog/63651/201709/63651-20170905201017069-171460014.png)
+![img](./img/5.png)
 
 ~~~shell
 # 创建项目
@@ -1785,7 +1787,7 @@ git clone [url]
     > > 1. 对给定元素再次进行相同的哈希计算；
     > > 2. 得到值之后判断位数组中的每个元素是否都为 1，如果值都为 1，那么说明这个值在布隆过滤器中，如果存在一个值不为 1，说明该元素不在布隆过滤器中。
     > >
-    > > ![布隆过滤器hash计算](https://camo.githubusercontent.com/bff9320e4e3bb9f59b072e1c40419c1f3c5122b3e12c4781733014f00318fad6/68747470733a2f2f6d792d626c6f672d746f2d7573652e6f73732d636e2d6265696a696e672e616c6979756e63732e636f6d2f323031392d31312f2545352542382538332545392539412538362545382542462538372545362542422541342545352539392541382d686173682545382542462539302545372541452539372e706e67)
+    > > ![布隆过滤器hash计算](./img/6.png)
 
 - **缓存击穿**
 
