@@ -1253,6 +1253,10 @@ jstask 进程号  # 查看堆栈信息
 #### 	1、MySQL
 
 > 使用见 base 或 basic 项目
+>
+> 查看：show variables like 'max_allowed_packet';
+>
+> 临时设置（需要重新进行MySQL连接）：set global max_allowed_packet = 10 * 1024 * 1024;
 
 #### 	2、SqlServer
 
