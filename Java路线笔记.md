@@ -1297,6 +1297,74 @@ jstask 进程号  # 查看堆栈信息
 | **文档型数据库**      | CouchDB， **MongoDb**                                     | Web应用（与Key-Value类似，Value是结构化的，不同的是数据库能够了解Value的内容） | Key-Value对应的键值对，Value为结构化数据        | 数据结构要求不严格，表结构可变，不需要像关系型数据库一样需要预先定义表结构 | 查询性能不高，而且缺乏统一的查询语法。                       |
 | **图形(Graph)数据库** | **Neo4J**， InfoGrid， Infinite Graph                     | 社交网络，推荐系统等。专注于构建关系图谱                     | 图结构                                          | 利用图结构相关算法。比如最短路径寻址，N度关系查找等          | 很多时候需要对整个图做计算才能得出需要的信息，而且这种结构不太好做分布式的集群方案。 |
 
+#### 5、文档生成
+
+- [screw](https://gitee.com/leshalv/screw)
+
+  > spring Boot 引入maven插件，支持导出为 html，word 和 md 文档
+  >
+  > ~~~xml
+  > <plugin>
+  >     <groupId>cn.smallbun.screw</groupId>
+  >     <artifactId>screw-maven-plugin</artifactId>
+  >     <version>1.0.5</version>
+  >     <dependencies>
+  >         <!-- HikariCP -->
+  >         <dependency>
+  >             <groupId>com.zaxxer</groupId>
+  >             <artifactId>HikariCP</artifactId>
+  >             <version>3.4.5</version>
+  >         </dependency>
+  >         <!--mysql driver-->
+  >         <dependency>
+  >             <groupId>mysql</groupId>
+  >             <artifactId>mysql-connector-java</artifactId>
+  >             <version>8.0.20</version>
+  >         </dependency>
+  >     </dependencies>
+  >     <configuration>
+  >         <!--username-->
+  >         <username>root</username>
+  >         <!--password-->
+  >         <password>123456</password>
+  >         <!--driver-->
+  >         <driverClassName>com.mysql.cj.jdbc.Driver</driverClassName>
+  >         <!--jdbc url-->
+  >         <jdbcUrl>jdbc:mysql://127.0.0.1:3306/local_test?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull&amp;autoReconnect=true&amp;serverTimezone=Asia/Shanghai&amp;useInformationSchema=true</jdbcUrl>
+  >         <!--生成文件类型 HTML WORD MD-->
+  >         <fileType>HTML</fileType>
+  >         <!--打开文件输出目录-->
+  >         <openOutputDir>true</openOutputDir>
+  >         <!--生成模板-->
+  >         <produceType>freemarker</produceType>
+  >         <!--文档名称 为空时:将采用[数据库名称-描述-版本号]作为文档名称-->
+  >         <fileName></fileName>
+  >         <!--描述-->
+  >         <description>screw</description>
+  >         <!--版本-->
+  >         <version>${project.version}</version>
+  >         <!--标题-->
+  >         <title>数据库文档</title>
+  >     </configuration>
+  >     <executions>
+  >         <execution>
+  >             <phase>compile</phase>
+  >             <goals>
+  >                 <goal>run</goal>
+  >             </goals>
+  >         </execution>
+  >     </executions>
+  > </plugin>
+  > ~~~
+
+- [DBCHM](https://gitee.com/dotnetchina/DBCHM)
+
+  > Windows 端软件，支持导出 chm、word、excel、pdf、html、xml、markdown 文档
+
+- **[TableGo](https://gitee.com/vipbooks/TableGo)** [官网](http://www.tablego.cn/)
+
+  > 主功能为代码生成，附带导出 word 文档
+
 ### 7、JavaWeb基础
 
 #### 	1、...
