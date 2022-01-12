@@ -1620,11 +1620,328 @@ git clone [url]
 
 > Java 解析 Excel 工具
 
-#### 	5、Netty
+#### 	5、NIO + Netty
 
-> 基于NIO（Nonblocking I/O，非阻塞IO）开发的网络通信框架
+> 基于NIO（Nonblocking I/O，同步非阻塞IO）开发的网络通信框架（异步非阻塞）
 >
-> [学习参考]: http://www.tianshouzhi.com/api/tutorials/netty/390	"田守枝Java技术博客"
+> [NIO 学习参考]: https://www.gulixueyuan.com/my/course/95	"尚硅谷教程"
+> [Netty 学习参考]: http://www.tianshouzhi.com/api/tutorials/netty/390	"田守枝Java技术博客"
+> [整体学习参考]: https://www.gulixueyuan.com/my/course/345	"尚硅谷教程"
+
+- **NIO**
+
+  > 面向缓冲区的非阻塞式 IO
+
+  - 通道 Channel（可以双向读取 存取数据需要使用 Buffer）
+
+    > 获取通道的一种方式是对支持通道的对象调用 getChannel() 方法。支持通道的类如下：
+    >
+    > - FileInputStream
+    >
+    > - FileOutputStream
+    >
+    > - RandomAccessFile
+    >
+    > - DatagramSocket
+    >
+    > - Socket
+    >
+    > - ServerSocket
+    >
+    > 使用 Files 类的静态方法 newByteChannel() 获取字节通道
+    >
+    > 通道的静态方法 open() 打开并返回指定通道
+
+    - FileChannel：用于读取、写入、映射和操作文件的通道
+    - DatagramChannel：通过 UDP 读写网络中的数据通道
+    - SocketChannel：通过 TCP 读写网络中的数据
+    - ServerSocketChannel：监听新来的 TCP 连接，创建SocketChannel
+
+    > **使用 read 和 write 方法时 可传入buffer[]，自动分散（Scatter）和聚集（Gather），即按顺序读取到各个 buffer 中**
+    >
+    > **transformTo()** 和 **transformFrom()** 可快速从通道传输数据到另一个通道
+
+  - 缓冲区 Buffer（与通道进行交互，从通道读入缓冲区，从缓冲区写入通道）
+
+    > 除 boolean 外，八大基本数据类型均存在对应 Buffer，常用 **ByteBuffer**，使用静态 **allocate(int capacity)** 方法创建固定容量对象
+
+    > **容量(capacity) ：**表示 Buffer 最大数据容量，缓冲区容量不能为负，并且创建后不能更改。
+    > **限制(limit)：**第一个不应该读取或写入的数据的索引，即位于 limit 后的数据不可读写。缓冲区的限制不能为负，并且不能大于其容量。
+    > **位置(position)：**下一个要读取或写入的数据的索引。缓冲区的位置不能为负，并且不能大于其限制
+    > **标记(mark)与重置(reset)：**标记是一个索引，通过 mark() 方法指定 Buffer 中一个特定的 position，之后可以通过 reset() 方法恢复到这个position
+
+    > | 常用方法                                                   | 描述                                                         |
+    > | ---------------------------------------------------------- | ------------------------------------------------------------ |
+    > | Buffer flip()                                              | 将缓冲区的界限设置为当前位置，并将当前位置充值为0            |
+    > | Buffer clear()                                             | 清空缓冲区并返回对缓冲区的引用                               |
+    > | Buffer mark()                                              | 对缓冲区设置标记                                             |
+    > | Buffer reset()                                             | 将位置position 转到以前设置的mark 所在的位置                 |
+    > | Buffer position(int n)                                     | 将设置缓冲区的当前位置为n , 并返回修改后的Buffer 对象        |
+    > | Buffer limit(int n)                                        | 将设置缓冲区界限为n, 并返回一个具有新limit 的缓冲区对象      |
+    > | Buffer rewind()                                            | 将位置设为为0，取消设置的mark                                |
+    > | int capacity()                                             | 返回Buffer 的capacity 大小                                   |
+    > | int limit()                                                | 返回Buffer 的界限(limit) 的位置                              |
+    > | int position()                                             | 返回缓冲区的当前位置position                                 |
+    > | int remaining()                                            | 返回position 和limit 之间的元素个数                          |
+    > | boolean hasRemaining()                                     | 判断缓冲区中是否还有元素                                     |
+    > | get()<br/>get(byte[] dst)<br/>get(int index)               | 读取单个字节<br/>批量读取多个字节到dst 中<br/>读取指定索引位置的字节（不会移动position） |
+    > | put(byte b)<br/>put(byte[] src)<br/>put(int index, byte b) | 将给定单个字节写入缓冲区的当前位置<br/>将src 中的字节写入缓冲区的当前位置<br/>将指定字节写入缓冲区的索引位置（不会移动position） |
+
+  - 选择器 Selector
+
+    > 使用 **Selector.open()** 实例化
+    >
+    > 使用 **SelectableChannle.register(Selector sel, int ops)** 注册通道，其中ops为需要监听的事件，包括以下四个，可以使用 ` 位或|` 运算符连接
+    >
+    > - 读: SelectionKey.OP_READ （1）
+    > - 写: SelectionKey.OP_WRITE （4）
+    > - 连接: SelectionKey.OP_CONNECT （8）
+    > - 接收: SelectionKey.OP_ACCEPT （16）
+
+    > | 常用方法                 | 描述                                                         |
+    > | ------------------------ | ------------------------------------------------------------ |
+    > | Set<SelectionKey> keys() | 所有的SelectionKey 集合。代表注册在该Selector上的Channel     |
+    > | selectedKeys()           | 被选择的SelectionKey 集合。返回此Selector的已选择键集        |
+    > | int select()             | 监控所有注册的Channel，当它们中间有需要处理的IO 操作时，该方法返回，并**将对应得的SelectionKey 加入被选择的SelectionKey 集合中**，该方法返回这些Channel 的数量。 |
+    > | int select(long timeout) | 可以设置超时时长的select() 操作                              |
+    > | int selectNow()          | 执行一个立即返回的select() 操作，该方法不会阻塞线程          |
+    > | Selector wakeup()        | 使一个还未返回的select() 方法立即返回                        |
+    > | void close()             | 关闭该选择器                                                 |
+    
+    > | SelectionKey 常用方法       | 描述                             |
+    > | --------------------------- | -------------------------------- |
+    > | int interestOps()           | 获取感兴趣事件集合               |
+    > | int readyOps()              | 获取通道已经准备就绪的操作的集合 |
+    > | SelectableChannel channel() | 获取注册通道                     |
+    > | Selector selector()         | 返回选择器                       |
+    > | boolean isReadable()        | 检测Channal 中读事件是否就绪     |
+    > | boolean isWritable()        | 检测Channal 中写事件是否就绪     |
+    > | boolean isConnectable()     | 检测Channel 中连接是否就绪       |
+    > | boolean isAcceptable()      | 检测Channel 中接收是否就绪       |
+
+  - 扩展内容
+
+    | 类或方法         | 描述                                                         |
+    | ---------------- | ------------------------------------------------------------ |
+    | Charset          | 数据编解码                                                   |
+    | MappedByteBuffer | 内存映射 ByteBuffer，直接在内存操作，不经过多余的拷贝和上下文切换，通过FileChannel.map() 获取 |
+    | RandomAccessFile | 功能强大的 File 处理类，可以直接获取通道                     |
+
+    > - **Paths 提供的get() 方法用来获取Path 对象：**
+    >   **Path get(String first, String … more)：**用于将多个字符串串连成路径。
+    > - **Path常用方法：**
+    >   **boolean endsWith(String path)：**判断是否以path 路径结束
+    >   **boolean startsWith(String path)：**判断是否以path 路径开始
+    >   **boolean isAbsolute()：**判断是否是绝对路径
+    >   **Path getFileName()：**返回与调用Path 对象关联的文件名
+    >   **Path getName(int idx)：**返回的指定索引位置idx 的路径名称
+    >   **int getNameCount()：**返回Path 根目录后面元素的数量
+    >   **Path getParent()：**返回Path对象包含整个路径，不包含Path 对象指定的文件路径
+    >   **Path getRoot()：**返回调用Path 对象的根路径
+    >   **Path resolve(Path p)：**将相对路径解析为绝对路径
+    >   **Path toAbsolutePath()：**作为绝对路径返回调用Path 对象
+    >   **String toString()：**返回调用Path 对象的字符串表示形式
+    
+    > - **Files常用方法：**
+    >   **Path copy(Path src, Path dest, CopyOption … how) ：** 文件的复制
+    >   **Path createDirectory(Path path, FileAttribute<?> … attr) ：** 创建一个目录
+    >   **Path createFile(Path path, FileAttribute<?> … arr)：**创建一个文件
+    >   **void delete(Path path)：**删除一个文件
+    >   **Path move(Path src, Path dest, CopyOption…how)：**将src 移动到dest 位置
+    >   **long size(Path path)：**返回path 指定文件的大小
+    > - **Files常用方法：用于判断**
+    >   **boolean exists(Path path, LinkOption … opts)：**判断文件是否存在
+    >   **boolean isDirectory(Path path, LinkOption … opts)：**判断是否是目录
+    >   **boolean isExecutable(Path path)：**判断是否是可执行文件
+    >   **boolean isHidden(Path path)：**判断是否是隐藏文件
+    >   **boolean isReadable(Path path)：**判断文件是否可读
+    >   **boolean isWritable(Path path)：**判断文件是否可写
+    >   **boolean notExists(Path path, LinkOption … opts)：**判断文件是否不存在
+    >   **public static <A extends BasicFileAttributes> A readAttributes(Path path,Class<A> type,LinkOption... options)：**获取与path 指定的文件相关联的属性。
+    > - **Files常用方法：用于操作内容**
+    >   **SeekableByteChannel newByteChannel(Path path, OpenOption…how)：**获取与指定文件的连接，how 指定打开方式。
+    >   **DirectoryStream newDirectoryStream(Path path)：**打开path 指定的目录
+    >   **InputStream newInputStream(Path path, OpenOption…how)：**获取InputStream 对象
+    >   **OutputStream newOutputStream(Path path, OpenOption…how)：**获取OutputStream 对象
+
+  - Socket 示例（TCP）
+
+    ~~~java
+    //客户端
+    @Test
+    public void client() throws IOException{
+        //1. 获取通道
+        SocketChannel sChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 9898));
+    
+        //2. 切换非阻塞模式
+        sChannel.configureBlocking(false);
+    
+        //3. 分配指定大小的缓冲区
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+    
+        //4. 发送数据给服务端
+        Scanner scan = new Scanner(System.in);
+    
+        while(scan.hasNext()){
+            String str = scan.next();
+            buf.put((new Date().toString() + "\n" + str).getBytes());
+            buf.flip();
+            sChannel.write(buf);
+            buf.clear();
+        }
+    
+        //5. 关闭通道
+        sChannel.close();
+    }
+    
+    //服务端
+    @Test
+    public void server() throws IOException{
+        //1. 获取通道
+        ServerSocketChannel ssChannel = ServerSocketChannel.open();
+    
+        //2. 切换非阻塞模式
+        ssChannel.configureBlocking(false);
+    
+        //3. 绑定连接
+        ssChannel.bind(new InetSocketAddress(9898));
+    
+        //4. 获取选择器
+        Selector selector = Selector.open();
+    
+        //5. 将通道注册到选择器上, 并且指定“监听接收事件”
+        ssChannel.register(selector, SelectionKey.OP_ACCEPT);
+    
+        //6. 轮询式的获取选择器上已经“准备就绪”的事件
+        while(selector.select() > 0){
+    
+            //7. 获取当前选择器中所有注册的“选择键(已就绪的监听事件)”
+            Iterator<SelectionKey> it = selector.selectedKeys().iterator();
+    
+            while(it.hasNext()){
+                //8. 获取准备“就绪”的是事件
+                SelectionKey sk = it.next();
+    
+                //9. 判断具体是什么事件准备就绪
+                if(sk.isAcceptable()){
+                    //10. 若“接收就绪”，获取客户端连接
+                    SocketChannel sChannel = ssChannel.accept();
+    
+                    //11. 切换非阻塞模式
+                    sChannel.configureBlocking(false);
+    
+                    //12. 将该通道注册到选择器上
+                    sChannel.register(selector, SelectionKey.OP_READ);
+                }else if(sk.isReadable()){
+                    //13. 获取当前选择器上“读就绪”状态的通道
+                    SocketChannel sChannel = (SocketChannel) sk.channel();
+    
+                    //14. 读取数据
+                    ByteBuffer buf = ByteBuffer.allocate(1024);
+    
+                    int len = 0;
+                    while((len = sChannel.read(buf)) > 0 ){
+                        buf.flip();
+                        System.out.println(new String(buf.array(), 0, len));
+                        buf.clear();
+                    }
+                }
+    
+                //15. 取消选择键 SelectionKey
+                it.remove();
+            }
+        }
+    }
+    ~~~
+
+  - Datagram 示例（UDP）
+
+    ~~~java
+    @Test
+    public void send() throws IOException{
+        DatagramChannel dc = DatagramChannel.open();
+    
+        dc.configureBlocking(false);
+    
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+    
+        Scanner scan = new Scanner(System.in);
+    
+        while(scan.hasNext()){
+            String str = scan.next();
+            buf.put((new Date().toString() + ":\n" + str).getBytes());
+            buf.flip();
+            dc.send(buf, new InetSocketAddress("127.0.0.1", 9898));
+            buf.clear();
+        }
+    
+        dc.close();
+    }
+    
+    @Test
+    public void receive() throws IOException{
+        DatagramChannel dc = DatagramChannel.open();
+    
+        dc.configureBlocking(false);
+    
+        dc.bind(new InetSocketAddress(9898));
+    
+        Selector selector = Selector.open();
+    
+        dc.register(selector, SelectionKey.OP_READ);
+    
+        while(selector.select() > 0){
+            Iterator<SelectionKey> it = selector.selectedKeys().iterator();
+    
+            while(it.hasNext()){
+                SelectionKey sk = it.next();
+    
+                if(sk.isReadable()){
+                    ByteBuffer buf = ByteBuffer.allocate(1024);
+    
+                    dc.receive(buf);
+                    buf.flip();
+                    System.out.println(new String(buf.array(), 0, buf.limit()));
+                    buf.clear();
+                }
+            }
+    
+            it.remove();
+        }
+    }
+    ~~~
+
+  - Pipe 示例（管道，单向传输，2个线程之间的单向数据连接。Pipe有一个source通道和一个sink通道。数据会被写到sink通道，从source通道读取）
+
+    ~~~java
+    @Test
+    public void test1() throws IOException{
+        //1. 获取管道
+        Pipe pipe = Pipe.open();
+    
+        //2. 将缓冲区中的数据写入管道
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+    
+        Pipe.SinkChannel sinkChannel = pipe.sink();
+        buf.put("通过单向管道发送数据".getBytes());
+        buf.flip();
+        sinkChannel.write(buf);
+    
+        //3. 读取缓冲区中的数据
+        Pipe.SourceChannel sourceChannel = pipe.source();
+        buf.flip();
+        int len = sourceChannel.read(buf);
+        System.out.println(new String(buf.array(), 0, len));
+    
+        sourceChannel.close();
+        sinkChannel.close();
+    }
+    ~~~
+    
+
+- **Netty**
+
+  
 
 #### 	6、RabbitMQ
 
