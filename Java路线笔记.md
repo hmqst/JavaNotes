@@ -2442,7 +2442,16 @@ git clone [url]
 >
 > 高级消息队列协议（AMQP）的开源消息代理软件（亦称面向消息的中间件）
 
-#### 	7、Redis6
+#### 7、Kafka
+
+> 布式发布订阅消息系统
+>
+> [B站 千峰教育 2.x新版本]: https://www.bilibili.com/video/BV1Xy4y1G7zA?share_source=copy_web	"千锋教育最新kafka入门到精通教程|kafka原理解析从安装到实战，阿里P7架构师讲解Java必备（附源码）"
+
+- 基础  详见`kafka-基础.pdf`
+- Java整合 详见`kafka-java整合.pdf`
+
+#### 	8、Redis6
 
 > 非关系型数据库，自带超时机制，常作缓存数据使用
 >
@@ -2698,13 +2707,13 @@ git clone [url]
   
   - 自动集成了 Ruby，搭建集群不需要手动安装 Ruby 环境
 
-#### 8、Mycat 和 ShardingSphere
+#### 9、Mycat 和 ShardingSphere
 
 > 数据库中间件，分库分表（数据分片，水平拆分，读写分离），分布式事务
 >
 > 目前 Mycat 为独立的服务，ShardingSphere 需要耦合到代码中
 
-#### 	9、ElasticSearch + LogStash + Kibina
+#### 	10、ElasticSearch + LogStash + Kibina
 
 > **ElasticSearch ：**基于Lucene的搜索服务器。它提供了一个分布式多用户能力的**全文搜索引擎**
 >
@@ -2714,21 +2723,21 @@ git clone [url]
 >
 > **ELK：**三者整合，用作**日志**收集，记录，检索，导入导出等
 
-#### 10、Nginx
+#### 11、Nginx
 
 > 高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务
 
-#### 	11、Docker + Portainer + Kubernetes（K8S）
+#### 	12、Docker + Portainer + Kubernetes（K8S）
 
 > 应用容器引擎 + 可视化管理工具 + 应用容器管理平台（集群）
 >
 > 让开发者可以打包他们的应用以及依赖包到一个可移植的镜像中，然后发布到任何流行的 Linux或Windows 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口。
 
-#### 12、Jenkens
+#### 13、Jenkens
 
 > 提供友好操作界面的**持续集成工具 / 自动化部署工具**
 
-#### 13、XXL-JOB 和 Elastic-job 和Quartz
+#### 14、XXL-JOB 和 Elastic-job 和Quartz
 
 > 任务调度框架
 > | 对比             | Quartz                                                 | Elastic-job                                                  | XXL-JOB（基于 Quartz 部分已于新版优化）                      |
