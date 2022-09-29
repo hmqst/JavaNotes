@@ -1,0 +1,87 @@
+1、aspose-words
+<repositories>
+    <repository>
+        <id>AsposeJavaAPI</id>
+        <name>Aspose Java API</name>
+        <url>https://repository.aspose.com/repo/</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>com.aspose</groupId>
+    <artifactId>aspose-words</artifactId>
+    <version>22.5</version>
+</dependency>
+
+
+// Load the document from disk.
+com.aspose.words.Document doc = new com.aspose.words.Document("C:\\Users\\YunFeng\\Desktop\\系统最新需求（财务211117）.docx");
+HtmlSaveOptions opts = new HtmlSaveOptions(SaveFormat.HTML);
+opts.setHtmlVersion(HtmlVersion.HTML_5);
+opts.setScaleImageToShapeSize(false);
+opts.setExportPageMargins(true);
+// Save the document into HTML.
+doc.save("C:\\Users\\YunFeng\\Desktop\\wordtohtml.html", opts);
+------------------------------------------------------------收费不好用----------------------------------------------------------
+
+
+2、spire.doc
+<repositories>
+    <repository>
+        <id>com.e-iceblue</id>
+        <url>http://repo.e-iceblue.cn/repository/maven-public/</url>
+    </repository>
+</repositories>
+<dependency>
+    <groupId>e-iceblue</groupId>
+    <artifactId>spire.doc.free</artifactId>
+    <version>5.2.0</version>
+</dependency>
+
+com.spire.doc.Document document = new com.spire.doc.Document();
+document.loadFromFile("C:\\Users\\YunFeng\\Desktop\\系统最新需求（财务211117）.docx");
+document.saveToFile("C:\\Users\\YunFeng\\Desktop\\wordtohtml.html", FileFormat.Html);
+document.dispose();
+-----------------------------------------------------------收费好用----------------------------------------------------------
+
+
+3、xdocreport（https://github.com/opensagres/xdocreport）
+<dependency>
+     <groupId>fr.opensagres.xdocreport</groupId>
+     <artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
+     <version>2.0.2</version>
+</dependency>
+
+File file = new File("C:\\Users\\YunFeng\\Desktop\\系统最新需求（财务211117）.docx");
+String name = file.getName();
+String filePath = name.substring(0, name.indexOf("."));
+String basePath = "C:\\Users\\YunFeng\\Desktop\\test";
+File saveImagePath = new File(basePath + File.separator + filePath);
+// 1) 加载docx文档生成 XWPFDocument 对象
+XWPFDocument document = new XWPFDocument(new FileInputStream(file));
+// 2) 设置装换参数
+XHTMLOptions xhtmlOptions = XHTMLOptions.create();
+
+// 设置图片管理器,把图片上传到服务器
+xhtmlOptions.setImageManager(new ImageManager(saveImagePath, ""){
+    @Override
+    public String resolve(String uri) {
+//       return super.resolve(uri);
+        return "http://192.168.8.97:8888/wordFile/" + filePath + File.separator + new File(uri).getName();
+    }
+});
+xhtmlOptions.setFragment(true);
+// 转html输出
+//  OutputStream out = new FileOutputStream("C:\\Users\\YunFeng\\Desktop\\wordtohtml.html");
+ServletOutputStream outputStream = response.getOutputStream();
+response.setCharacterEncoding("UTF-8");
+response.setContentType("text/plain;charset=UTF-8");
+XHTMLConverter.getInstance().convert(document, outputStream, xhtmlOptions);
+------------------------------------------------------------免费好用---------------------------------------------------------
+
+docker run -d -p 9000:9000 --name minio2 -v /app/cihong/minio/data:/data -v /app/cihong/minio/config:/root/.minio -e "MINIO_ROOT_USER=minioadmin" -e "MINIO_ROOT_PASSWORD=minioadmin" minio/minio server /data 
+
+
+docker run -d -p 9000:9000 -p 9001:9001 --name minio -v /app/minio/data:/data -v /app/minio/config:/root/.minio -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLEL" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEYL" minio/minio server /data --console-address ":9001" --address ":9000"
+
+ docker run -itd --name redis-test -p 6379:6379 redis
+
