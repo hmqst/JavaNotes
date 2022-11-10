@@ -2737,7 +2737,15 @@ git clone [url]
 
 > 提供友好操作界面的**持续集成工具 / 自动化部署工具**
 
-#### 14、XXL-JOB 和 Elastic-job 和Quartz
+#### 14、InfluxDB2.x
+
+> 时序数据库。常用于报警监控，日志存储等。不可修改值
+
+> [尚硅谷教程]: https://www.bilibili.com/video/BV1xd4y1c73c/?spm_id_from=333.999.0.0	"尚硅谷大数据技术之InfluxDB时序数据库"
+>
+> 配套资料pdf 详见`尚硅谷大数据技术之InfluxDB.pdf`
+
+#### 15、XXL-JOB 和 Elastic-job 和Quartz
 
 > 任务调度框架
 > | 对比             | Quartz                                                 | Elastic-job                                                  | XXL-JOB（基于 Quartz 部分已于新版优化）                      |
