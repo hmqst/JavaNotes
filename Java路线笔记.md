@@ -2727,6 +2727,46 @@ git clone [url]
 
 > 高性能的HTTP和反向代理web服务器，同时也提供了IMAP/POP3/SMTP服务
 
+- 跨域问题
+
+  ~~~nginx
+  server {
+      listen       22222;
+      server_name  localhost;
+      location  / {
+          if ($request_method = 'OPTIONS') {
+              add_header Access-Control-Allow-Origin 'http://localhost:8080';
+              add_header Access-Control-Allow-Headers '*';
+              add_header Access-Control-Allow-Methods '*';
+              add_header Access-Control-Allow-Credentials 'true';
+              return 204;
+          }
+          if ($request_method != 'OPTIONS') {
+              add_header Access-Control-Allow-Origin 'http://localhost:8080' always;
+              add_header Access-Control-Allow-Credentials 'true';
+          }
+          proxy_pass  http://localhost:59200;
+      }
+  }
+  #或者
+  server {
+      listen       22222;
+      server_name  localhost;
+      location  / {
+          add_header Access-Control-Allow-Origin 'http://localhost:8080' always;
+          add_header Access-Control-Allow-Headers '*';
+          add_header Access-Control-Allow-Methods '*';
+          add_header Access-Control-Allow-Credentials 'true';
+          if ($request_method = 'OPTIONS') {
+              return 204;
+          }
+          proxy_pass  http://localhost:59200;
+      }
+  }
+  ~~~
+
+  
+
 #### 	12、Docker + Portainer + Kubernetes（K8S）
 
 > 应用容器引擎 + 可视化管理工具 + 应用容器管理平台（集群）
