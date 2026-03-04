@@ -2485,6 +2485,8 @@ git clone [url]
     >
     > **本地测试还需修改下列参数**
     >
+    > bind 0.0.0.
+    >
     > port 端口号
     >
     > pid 名称
@@ -2498,6 +2500,22 @@ git clone [url]
   - ruby工具启动集群：/src/redis-trib.rb create --replicas 1 ip:port.. 
 
     > `--replicas 1` 表示主从复制比例为 1:1，即一个主节点对应一个从节点
+    >
+    > /src/redis-cli --cluster create 172.12.12.22:6379 172.12.12.22:6380 172.12.12.22:6381 172.12.12.22:6382 172.12.12.22:6383 172.12.12.22:6384 --cluster-replicas 1
+
+  - 动态设置集群密码
+
+    > ./redis-cli -c -p 7000 
+    >
+    > config set masterauth Dingdang7186
+    >
+    > config set requirepass Dingdang7186
+    >
+    > auth Dingdang7186
+    >
+    > config rewrite 
+
+    
 
 - **数据持久化**
 
